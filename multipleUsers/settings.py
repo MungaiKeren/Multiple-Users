@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'users',
 ]
 
+AUTH_USER_MODEL = 'users.User' # changes the default user to my user model
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -76,10 +78,12 @@ WSGI_APPLICATION = 'multipleUsers.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("DB_NAME"),
-        'USER': os.environ.get("DB_USER"),
-    'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'auth',
+        'USER':'root',
+        'PASSWORD':'Kaydexter3839##',
+        'HOST':'127.0.0.1',
+        'PORT': '3306',     
     }
 }
 
