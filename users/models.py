@@ -2,16 +2,19 @@ from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager
 )
-
+# adding the full name as a reqired field in this case
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, is_active=True, is_staff=False, is_admin=False):
+    def create_user(self, email,full_name, password=None, is_active=True, is_staff=False, is_admin=False):
         if not email:
             raise ValueError("Users must have email")
         if not password:
             raise ValueError("Users must have password")
+        if not full_name:
+            raise ValueError("Users must have full names")
 
         user_obj = self.model(
-            email = self.normalize_email(email)
+            email = self.normalize_email(email),
+            full_name= full_name,
         )
         user_obj.set_password(password) # change password
         user_obj.staff = is_staff
@@ -20,17 +23,19 @@ class UserManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
     
-    def create_staffUser(self, email, password=None):
+    def create_staffUser(self, email,full_name, password=None):
         user = self.create_user(
             email,
+            full_name,
             password=password,
             is_staff=True,
         )
         return user
     
-    def create_superuser(self, email, password=None):
+    def create_superuser(self, email,full_name, password=None):
         user = self.create_user(
             email,
+            full_name,
             password=password,
             is_staff=True,
             is_admin= True,
@@ -40,7 +45,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
-    # full_name = models.CharField(max_length=255)
+    full_name = models.CharField(max_length=255)
     active = models.BooleanField(default=True) #can login
     staff = models.BooleanField(default=False) # not super user
     admin = models.BooleanField(default=False) #superuser
@@ -50,7 +55,7 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = "email" #username
     # username and password field are required by default
-    REQUIRED_FIELDS = [] #["full name"] Would appear in python manage.py createsuperuser
+    REQUIRED_FIELDS = ['full_name'] #["full name"] Would appear in python manage.py createsuperuser
 
     objects = UserManager()
     def __str__(self):
