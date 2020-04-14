@@ -18,13 +18,13 @@ class UserAdminCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
 
-        if password1 and password2 and password1 !== password2:
+        if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords do not match")
         return password2
     
     def save(self, commit=True):
         # save the provided password in hashed format
-        user = super(UserCreationForm, self).save(commit=False)
+        user = super(UserAdminCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
 
         if commit:
@@ -44,4 +44,3 @@ class UserAdminChangeForm(forms.ModelForm):
         # This is done here rather than on the field, 
         # because the field does not have the initial value 
         return self.initial["password"]
-        
