@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'bootstrap4',
 ]
 
 AUTH_USER_MODEL = 'users.User' # changes the default user to my user model
